@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	SetConsoleTitle(L"Merry Christmass :)");
+	SetConsoleTitle("Merry Christmass :)");
 	MemoryManagment Mem("csgo.exe");
 	cout << "> Wainting for csgo!" << endl;
 

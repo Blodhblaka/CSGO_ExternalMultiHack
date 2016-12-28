@@ -57,9 +57,9 @@ HANDLE MemoryManagment::GetProcessByName()
 	{
 		do
 		{
-			char str[25];
-			wcstombs(str, process.szExeFile, 25);
-			if (_stricmp(str, proccessName) == 0)
+//			char str[25];
+//			wcstombs(str, process.szExeFile, 25);
+			if (_stricmp(process.szExeFile, proccessName) == 0)
 			{
 				pid = process.th32ProcessID;
 				proccesId = pid;
@@ -91,10 +91,10 @@ DWORD MemoryManagment::GetModuleBase(LPSTR lpModuleName, int *sizeOut)
 	BOOL bModule = Module32First(hSnapShot, &lpModuleEntry);
 	while (bModule)
 	{
-		char str[25];
-		wcstombs(str, lpModuleEntry.szModule, 25);
+//		char str[25];
+//		wcstombs(str, lpModuleEntry.szModule, 25);
 
-		if (_stricmp(str, lpModuleName) == 0)
+		if (_stricmp(lpModuleEntry.szModule, lpModuleName) == 0)
 		{
 			CloseHandle(hSnapShot);
 			*sizeOut = lpModuleEntry.modBaseSize;
