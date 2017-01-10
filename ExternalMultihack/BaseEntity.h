@@ -1,7 +1,7 @@
 #pragma once
 #include "MemoryManagment.h"
-#include "Vector.h"
 #include "Offsets.h"
+#include "CSGO_Structs.h"
 
 class BaseEntity
 {

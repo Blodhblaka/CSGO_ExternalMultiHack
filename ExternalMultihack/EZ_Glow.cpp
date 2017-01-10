@@ -12,9 +12,9 @@ using namespace std;
 
 int main()
 {
-	SetConsoleTitle("Merry Christmass :)");
+	SetConsoleTitle("Blod's multihack cpp edition");
 	MemoryManagment Mem("csgo.exe");
-	cout << "> Wainting for csgo!" << endl;
+	cout << "> Waiting for csgo!" << endl;
 
 	while (!Mem.Initialize()) {
 		Sleep(300);

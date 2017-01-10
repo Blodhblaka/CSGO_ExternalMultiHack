@@ -14,12 +14,16 @@ public:
 	float GetFlashDuration();
 	int GetGlowIndex();
 	bool IsAlive();
+	Vector GetBonePosition(int boneId);
+	Vector GetEyePosition();
 
 	void SetFlashDuration(float value);
+	void SetSpotted(bool value);
 
 protected:
 	int health = -1;
 	int glowIndex = -1;
 	float flashDuration = -1;
+	Vector eyePosition;
 };
 

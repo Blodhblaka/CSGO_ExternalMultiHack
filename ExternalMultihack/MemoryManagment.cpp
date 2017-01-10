@@ -19,6 +19,9 @@ bool MemoryManagment::Initialize() {
 	if ((clientModuleBase = GetModuleBase("client.dll", &clientModuleSize)) == NULL)
 		return false;
 
+	if ((engineModuleBase = GetModuleBase("engine.dll", &engineModuleSize)) == NULL)
+		return false;
+
 	return true;
 }
 
@@ -57,8 +60,6 @@ HANDLE MemoryManagment::GetProcessByName()
 	{
 		do
 		{
-//			char str[25];
-//			wcstombs(str, process.szExeFile, 25);
 			if (_stricmp(process.szExeFile, proccessName) == 0)
 			{
 				pid = process.th32ProcessID;
@@ -91,9 +92,6 @@ DWORD MemoryManagment::GetModuleBase(LPSTR lpModuleName, int *sizeOut)
 	BOOL bModule = Module32First(hSnapShot, &lpModuleEntry);
 	while (bModule)
 	{
-//		char str[25];
-//		wcstombs(str, lpModuleEntry.szModule, 25);
-
 		if (_stricmp(lpModuleEntry.szModule, lpModuleName) == 0)
 		{
 			CloseHandle(hSnapShot);

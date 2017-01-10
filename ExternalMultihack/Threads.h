@@ -3,6 +3,7 @@
 #include "CSGO_Structs.h"
 #include <Windows.h>
 #include "Options.h"
+#include "Utils.h"
 #include <map>
 
 using namespace std;
@@ -15,7 +16,7 @@ enum GLOW_MODE
 	HEALTH_BASED_COLOR
 };
 
-std::map<GLOW_MODE, char*> m;
+std::map<GLOW_MODE, char*> glowModeMap;
 
 void Shoot()
 {
@@ -37,7 +38,7 @@ namespace Threads {
 				Options::glowMode++;
 				if (Options::glowMode > 2)
 					Options::glowMode = 0;
-				std::cout << "Glow mode: " << m[(GLOW_MODE)Options::glowMode] << endl;
+				cout << "Glow mode: " << glowModeMap[(GLOW_MODE)Options::glowMode] << endl;
 			}
 			Sleep(50);
 		}
@@ -50,6 +51,7 @@ namespace Threads {
 				if (EntList->local.GetCrossId() > 0 && EntList->local.GetCrossId() < 64)
 					if (EntList->local.GetTeam() != EntList->players[EntList->local.GetCrossId()].GetTeam())
 						Shoot();
+
 			Sleep(50);
 		}
 	}
@@ -79,20 +81,114 @@ namespace Threads {
 		}
 	}
 
+	void Misc(EntityList *EntList) 
+	{
+		while (true) {
+
+			if (Options::noFlash)
+				EntList->local.SetFlashDuration(0.f);
+
+			if (Options::bHop) 
+				if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+					if (!(EntList->local.GetFlags() & (int)EntityFlags::FL_ONGROUND))
+						EntList->local.SetJump(4);
+					else EntList->local.SetJump(5);
+				}
+
+			if(Options::radar)
+				for each (Player player in EntList->players)
+				{
+					if (player.GetIndex() == EntList->local.GetIndex())
+						continue;
+
+					if (!player.IsAlive())
+						continue;
+
+					if (player.GetDormant())
+						continue;
+
+					player.SetSpotted(true);
+				}
+
+
+			Sleep(5);
+		}
+	}
+
+	void Aimbot(EntityList* EntList)
+	{
+		while (true) {
+			if (GetAsyncKeyState(VK_MENU) & 0x8000)
+			{
+				Vector bestAimAngle;
+				float bestFov = Options::aimbotFov;
+
+				for each (Player player in EntList->players)
+				{
+					if (player.GetIndex() == EntList->local.GetIndex())
+						continue;
+
+					if (!player.IsAlive())
+						continue;
+
+					if (player.GetDormant())
+						continue;
+
+					if (player.GetTeam() == EntList->local.GetTeam())
+						continue;
+
+					Vector headPosition = player.GetBonePosition(8);
+					
+					if (headPosition.IsEmpty())
+						continue;
+
+					Vector aimAngle;
+					Utils::CalcAngle(EntList->local.GetEyePosition(), headPosition, aimAngle);
+
+					float fov = Utils::GetFov(EntList->local.GetViewAngles(), aimAngle);
+
+					if (fov < bestFov) {
+						bestAimAngle = aimAngle;
+						bestFov = fov;
+					}
+				}
+
+
+				if (!bestAimAngle.IsEmpty()) {
+					Vector newViewAngles;
+					Utils::Clamp(bestAimAngle);
+					
+					Vector delta = EntList->local.GetViewAngles() - bestAimAngle;
+					Utils::Clamp(delta);
+
+
+					newViewAngles = EntList->local.GetViewAngles() - delta / Options::smoothFactor;
+					
+					if(Utils::Clamp(newViewAngles))
+						EntList->local.SetViewAngles(newViewAngles);
+				}
+			}
+
+			Sleep(1);
+		}
+	}
+
 	void Init(MemoryManagment *Mem) {
 		cout << "> Updating Offsets!" << endl;
 		Offsets::UpdateOffsets(Mem);
-		cout << "> Done Enoy!" << endl;
+		cout << "> Done Enjoy!" << endl;
 
-		m[NONE] = "None";
-		m[SOLID_COLOR] = "Solid";
-		m[HEALTH_BASED_COLOR] = "Health";
+		glowModeMap[NONE] = "None";
+		glowModeMap[SOLID_COLOR] = "Solid";
+		glowModeMap[HEALTH_BASED_COLOR] = "Health";
 
 		EntityList EntList(Mem);
 
 		thread UpdateThread(Update, &EntList);
 		thread TriggerThread(Trigger, &EntList);
 		thread GlowThread(Glow, &EntList, Mem);
+		thread MiscThread(Misc, &EntList);
+		thread AimbotThread(Aimbot, &EntList);
 
 		UpdateThread.join();
 	}

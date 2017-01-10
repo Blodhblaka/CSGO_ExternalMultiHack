@@ -16,6 +16,12 @@ namespace Offsets {
 	extern DWORD flashDuration;
 	extern DWORD crossId;
 	extern DWORD glowIndex;
+	extern DWORD flags;
+	extern DWORD forceJump;
+	extern DWORD boneMatrix;
+	extern DWORD viewOffset;
+	extern DWORD clientState;
+	extern DWORD viewAngles;
 
 	extern void GetLocalPlayer(MemoryManagment *mem);
 	extern void GetObjectBase(MemoryManagment *mem);

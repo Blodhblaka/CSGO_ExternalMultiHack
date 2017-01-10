@@ -16,6 +16,12 @@ namespace Offsets {
 	 DWORD flashDuration = 0xA308;
 	 DWORD crossId = 0xAA70;
 	 DWORD glowIndex = 0xA320;
+	 DWORD flags = 0x100;
+	 DWORD forceJump = 0x4F5EB58;
+	 DWORD boneMatrix = 0x2698;
+	 DWORD viewOffset = 0x104;
+	 DWORD clientState = 0x5C7524;
+	 DWORD viewAngles = 0x4D0C;
 
 
 	void GetLocalPlayer(MemoryManagment *mem)

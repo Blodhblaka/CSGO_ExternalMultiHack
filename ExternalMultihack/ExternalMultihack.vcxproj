@@ -19,10 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DE853320-DB15-47E3-85B7-D9B9876B219F}</ProjectGuid>
+    <ProjectGuid>{98DFD08A-D0DA-42D4-9168-373A2FE7C7AE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EZ_Glow</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>ExternalMultihack</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -160,7 +161,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Threads.h" />
-    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseEntity.cpp" />

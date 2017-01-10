@@ -23,6 +23,9 @@ public:
 
 	int clientModuleSize;
 	DWORD clientModuleBase;
+
+	int engineModuleSize;
+	DWORD engineModuleBase;
 private:
 	char* proccessName;
 	HANDLE proccessHandle;
